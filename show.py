@@ -1,11 +1,8 @@
-import chainer
 import numpy as np
-import chainer.functions as F
-import chainer.links as L
-from chainer import optimizers
 from chainer import Variable
 from chainer import serializers
-import os
+import sys
+sys.path.append('./networks')
 
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
@@ -13,23 +10,28 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--output_dir','-o',default = None)
-parser.add_argument('--input_dir','-i',default = None)
-parser.add_argument('--input_epoch','-e',type=int,default = None)
+parser.add_argument('--input_file','-i',default = None, help = 'Path to h5 file')
+parser.add_argument('--mode','-m',help = 'Train mode (mnist_fc, mnist_conv, people_conv)', default = None)
 args = parser.parse_args()
 
-# from mnist_fc import Generator,Discriminator
-# from mnist_conv import Generator,Discriminator
-from people_conv import Generator,Discriminator
+if args.mode == 'mnist_fc':
+	from mnist_fc import Generator
+elif args.mode == 'mnist_conv':
+	from mnist_conv import Generator
+elif args.mode == 'people_conv':
+	from people_conv import Generator
+else:
+	exit()
 
 G = Generator()
 len_z = G.in_size
 
-if args.input_dir != None:
-	in_dir = args.input_dir
-	if args.input_epoch != None:
-		serializers.load_hdf5("%s/gan_model_gen%d.h5"%(in_dir, args.input_epoch), G)
-	else:
-		serializers.load_hdf5("%s/current_gen.h5"%(in_dir), G)
+if args.input_file != None:
+	serializers.load_hdf5(args.input_file, G)
+else:
+	print "You should select input file"
+	exit()
+
 batchsize = 25
 z = Variable(np.random.uniform(-1,1,(batchsize,len_z)).astype(np.float32))
 y1 = G(z,False)

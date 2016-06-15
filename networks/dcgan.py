@@ -15,7 +15,9 @@ class Generator(chainer.Chain):
             bc2=L.BatchNormalization(size=512),
             bc3=L.BatchNormalization(size=256),
             bc4=L.BatchNormalization(size=128))
-		self.z_shape=100
+		self.in_size=100
+		self.out_size=3*64*64
+		self.imshape=(3,64,64)
 
 	def __call__(self, x, train=True):
 		h1 = F.relu(self.bc1(F.reshape(self.l1(x),(x.data.shape[0],1024,4,4))))
@@ -37,7 +39,9 @@ class Discriminator(chainer.Chain):
             bc3=L.BatchNormalization(size=512),
             bc4=L.BatchNormalization(size=1024),
             l1=L.Linear(4*4*1024, 1))
-		self.x_shape=(3,64,64)
+		self.in_size = 3*64*64
+		self.out_size = 1
+		self.imshape=(3,64,64)
 
 	def __call__(self, x, train=True):
 		h1 = F.leaky_relu(self.bc1(self.conv1(x)))

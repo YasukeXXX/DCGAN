@@ -22,6 +22,7 @@ parser.add_argument('--n_epoch','-n',type=int,default = 10000)
 parser.add_argument('--save_interval','-s',type=int,default = 5000)
 parser.add_argument('--batchsize','-b',type=int,default = 401)
 parser.add_argument('--mode','-m',help = 'Train mode (mnist_fc, mnist_conv, people)', default = None)
+parser.add_argument('--dataset','-ds',help = 'Dataset (mnist, people)', default = None)
 
 args = parser.parse_args()
 
@@ -29,23 +30,29 @@ if args.mode == None: exit()
 
 print 'fetch data...'
 
-if args.mode == 'mnist_fc':
+if args.dataset == 'mnist':
 	from sklearn.datasets import fetch_mldata
-	from mnist_fc import Generator, Discriminator
 	data = fetch_mldata('MNIST original', data_home=".")
 	images = np.array(data.data).astype(np.float32)
-	images = images.reshape(images.shape[0],28,28)
-elif args.mode == 'mnist_conv':
-	from sklearn.datasets import data_mldata
-	from mnist_conv import Generator, Discriminator
-	data = fetch_mldata('MNIST original', data_home=".")
-	images = np.array(data.data).astype(np.float32)
-	images = images.reshape(images.shape[0],28,28)
-elif args.mode == 'people':
+elif args.dataset == 'people':
 	from sklearn.datasets import fetch_lfw_people
-	from people_conv import Generator, Discriminator
 	data = fetch_lfw_people()
 	images = np.array(data.images).astype(np.float32)
+else:
+	print 'Select dataset from (mnist, people)'
+	exit()
+
+if args.mode == 'mnist_fc':
+	from mnist_fc import Generator, Discriminator
+	images = images.reshape(images.shape[0],28,28)
+elif args.mode == 'mnist_conv':
+	from mnist_conv import Generator, Discriminator
+	images = images.reshape(images.shape[0],28,28)
+elif args.mode == 'people':
+	from people_conv import Generator, Discriminator
+else:
+	print 'Select mode from (mnist_fc, mnist_conv, people)'
+	exit()
 
 print 'done fetch data'
 
