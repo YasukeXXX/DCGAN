@@ -34,6 +34,7 @@ if args.dataset == 'mnist':
 	from sklearn.datasets import fetch_mldata
 	data = fetch_mldata('MNIST original', data_home=".")
 	images = np.array(data.data).astype(np.float32)
+	images = images.reshape(images.shape[0],28,28)
 elif args.dataset == 'people':
 	from sklearn.datasets import fetch_lfw_people
 	data = fetch_lfw_people()
@@ -44,10 +45,8 @@ else:
 
 if args.mode == 'mnist_fc':
 	from mnist_fc import Generator, Discriminator
-	images = images.reshape(images.shape[0],28,28)
 elif args.mode == 'mnist_conv':
 	from mnist_conv import Generator, Discriminator
-	images = images.reshape(images.shape[0],28,28)
 elif args.mode == 'people':
 	from people_conv import Generator, Discriminator
 else:
