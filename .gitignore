@@ -1,4 +1,2 @@
 /mldata
-/*.pyc
-
-/networks/*.pyc
+*.pyc
