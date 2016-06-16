@@ -7,12 +7,12 @@ class Generator(chainer.Chain):
 	def __init__(self):
 		super(Generator, self).__init__(
 			l1=L.Linear(100,512*4*4),
-            dcv2=L.Deconvolution2D(in_channels=512,out_channels=256,ksize=4,stride=2,pad=1),
-            dcv3=L.Deconvolution2D(in_channels=256,out_channels=128,ksize=4,stride=2,pad=1),
-            dcv4=L.Deconvolution2D(in_channels=128,out_channels=3,ksize=4,stride=2,pad=1),
-            bc2=L.BatchNormalization(size=512),
-            bc3=L.BatchNormalization(size=256),
-            bc4=L.BatchNormalization(size=128))
+            dcv1=L.Deconvolution2D(in_channels=512,out_channels=256,ksize=4,stride=2,pad=1),
+            dcv2=L.Deconvolution2D(in_channels=256,out_channels=128,ksize=4,stride=2,pad=1),
+            dcv3=L.Deconvolution2D(in_channels=128,out_channels=3,ksize=4,stride=2,pad=1),
+            bc1=L.BatchNormalization(size=512),
+            bc2=L.BatchNormalization(size=256),
+            bc3=L.BatchNormalization(size=128))
 		self.in_size=100
 		self.out_size=3*64*64
 		self.imshape=(3,64,64)
